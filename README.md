@@ -58,8 +58,8 @@ CREATE VIEW AS SELECT title, authors.name, count(*) AS views FROM articles, auth
 2. error_view
 ```bash
 CREATE VIEW error_view AS SELECT date(time),round(100.0*sum(case log.status  '200 OK' 
-  then 0 else 1 end)/count(log.status),2) AS "Percent Error" FROM log GROUP BY date(time) 
-  ORDER BY "Percent Error" DESC;
+  then 0 else 1 end)/count(log.status),2) AS "Error Rate" FROM log GROUP BY date(time) 
+  ORDER BY "Error Rate" DESC;
 ```
 
 ### Running the code
