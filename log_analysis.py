@@ -28,34 +28,39 @@ query_error_days = "SELECT * FROM error_view WHERE \"Error Rate\" > 1;"
 
 # Execute query & return results
 def get_results(query):
-    db = psycopg2.connect(database=DBNAME)
-    c = db.cursor()
-    c.execute(query)
-    results = c.fetchall()
-    db.close()
+    try:
+        db = psycopg2.connect(database=DBNAME)
+        c = db.cursor()
+        c.execute(query)
+        results = c.fetchall()
+        db.close()
+    except Exception as e:
+        print('An error occurred: ' + str(e))
+        raise
     return results
 
 
 # Print Results
 def print_results(results, source):
     if source == POPULAR_ARTICLES:
-        print ("\n1. The 3 most popular articles of all time are:\n\n")
+        print("\n1. The 3 most popular articles of all time are:\n\n")
         for result in results['results']:
-            print (
+            print(
                 '\"' + str(result[0]) + '\"' + ' by ' + str(result[1]) +
                 ' -> ' + str(result[2]) + ' views'
                 )
 
     elif source == POPULAR_AUTHORS:
-        print ("\n2. The most popular authors are:\n\n")
+        print("\n2. The most popular authors are:\n\n")
         for result in results['results']:
-            print (str(result[0]) + ' -> ' + str(result[1]) + ' views')
+            print(str(result[0]) + ' -> ' + str(result[1]) + ' views')
 
     elif source == ERROR_RATES:
-        print ("""\n3. Days on which more than 1% of requests led to
+        print("""\n3. Days on which more than 1% of requests led to
         an error:\n\n""")
         for result in results['results']:
-            print (str(result[0]) + ' -> ' + str(result[1]) + ' %')
+            print(str(result[0]) + ' -> ' + str(result[1]) + ' %')
+
 
 # Store Results of query
 popular_articles_result = dict()
